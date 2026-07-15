@@ -1,0 +1,71 @@
+[
+    {
+        "role": "backend",
+        "resume_text": "Python backend developer with SQL, REST API, Docker and AWS experience.",
+        "jd_text": "Looking for a backend engineer with Python, SQL, API, Docker and AWS skills.",
+        "expected_confidence": "Strong match"
+    },
+
+    {
+        "role": "backend",
+        "resume_text": "Python developer with SQL knowledge but no backend development experience.",
+        "jd_text": "Looking for a backend engineer with Python, SQL and API skills.",
+        "expected_confidence": "Moderate match"
+    },
+
+    {
+        "role": "backend",
+        "resume_text": "React frontend developer with HTML, CSS and JavaScript.",
+        "jd_text": "Looking for a backend engineer with Python, SQL and API skills.",
+        "expected_confidence": "Weak match"
+    },
+
+    {
+        "role": "frontend",
+        "resume_text": "Frontend developer skilled in HTML, CSS, JavaScript, React, TypeScript and Tailwind.",
+        "jd_text": "Looking for a frontend developer with React, JavaScript, HTML and CSS.",
+        "expected_confidence": "Strong match"
+    },
+
+    {
+        "role": "frontend",
+        "resume_text": "Frontend developer with HTML, CSS and JavaScript.",
+        "jd_text": "Looking for a frontend developer with React, JavaScript, HTML and CSS.",
+        "expected_confidence": "Moderate match"
+    },
+
+    {
+        "role": "software_engineer",
+        "resume_text": "Software engineer skilled in Python, Java, C++, SQL, Data Structures, Algorithms, Docker and MongoDB.",
+        "jd_text": "Hiring Software Engineer with Python, Java, Data Structures, Algorithms and SQL.",
+        "expected_confidence": "Strong match"
+    },
+
+    {
+        "role": "software_engineer",
+        "resume_text": "Python developer with SQL and Java but no Data Structures or Algorithms.",
+        "jd_text": "Hiring Software Engineer with Python, Java, Data Structures, Algorithms and SQL.",
+        "expected_confidence": "Moderate match"
+    },
+
+    {
+        "role": "fullstack",
+        "resume_text": "Full Stack developer with React, HTML, CSS, JavaScript, Python, Backend, SQL, MongoDB and Docker.",
+        "jd_text": "Looking for Full Stack developer with React, Python, SQL, Backend and JavaScript.",
+        "expected_confidence": "Strong match"
+    },
+
+    {
+        "role": "ml_engineer",
+        "resume_text": "Machine Learning Engineer with Python, NumPy, Pandas, Scikit-Learn, TensorFlow and Docker.",
+        "jd_text": "Hiring ML Engineer with Python, Machine Learning, NumPy, Pandas and Scikit-Learn.",
+        "expected_confidence": "Strong match"
+    },
+
+    {
+        "role": "ml_engineer",
+        "resume_text": "Python developer with SQL, Backend and REST APIs.",
+        "jd_text": "Hiring ML Engineer with Python, Machine Learning, NumPy, Pandas and Scikit-Learn.",
+        "expected_confidence": "Weak match"
+    }
+]
