@@ -1,21 +1,18 @@
 from ml.utilities.skill_aliases import SKILL_ALIASES
 from ml.utilities.role_profiles import get_role_profile
 from .text_processing import clean_and_normalize
+import re
 
 
 def extract_skills(text: str) -> set:
-    """
-    Extracts canonical skills from text using alias matching.
-    """
-
     text = clean_and_normalize(text)
     found_skills = set()
 
     for canonical_skill, aliases in SKILL_ALIASES.items():
-
         for alias in aliases:
+            pattern = r"\b" + re.escape(alias) + r"\b"
 
-            if alias in text:
+            if re.search(pattern, text):
                 found_skills.add(canonical_skill)
                 break
 

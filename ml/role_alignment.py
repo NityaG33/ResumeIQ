@@ -43,7 +43,7 @@ def compute_role_alignment(
 
         "matched_role_skills": sorted(matched),
 
-        "missing_role_skills": sorted(missing)
+        "additional_technologies": sorted(missing)
     }
 
 if __name__ == "__main__":

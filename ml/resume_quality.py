@@ -476,6 +476,34 @@ def compute_resume_quality_score(report: dict) -> dict:
         overall_score,
     )
 
+    score_breakdown = {
+
+    "structure": {
+        "score": structure_score,
+        "max_score": sum(STRUCTURE_WEIGHTS.values())
+    },
+
+    "contact": {
+        "score": contact_score,
+        "max_score": sum(CONTACT_WEIGHTS.values())
+    },
+
+    "content": {
+        "score": content_score,
+        "max_score": sum(CONTENT_WEIGHTS.values())
+    },
+
+    "professional": {
+        "score": professional_score,
+        "max_score": sum(PROFESSIONAL_WEIGHTS.values())
+    },
+
+    "ats": {
+        "score": ats_score,
+        "max_score": sum(ATS_WEIGHTS.values())
+    }
+}
+
     return {
         "overall_score": overall_score,
         "grade": grade,
@@ -485,6 +513,7 @@ def compute_resume_quality_score(report: dict) -> dict:
         "content_score": content_score,
         "professional_score": professional_score,
         "ats_score": ats_score,
+        "score_breakdown": score_breakdown
     }
 
 
@@ -607,9 +636,19 @@ def generate_resume_strengths(report: dict) -> list:
 
     # Content
 
-    if report["action_verbs"]["count"] >= 5:
+    if report["action_verbs"]["count"] >= 2:
         strengths.append(
             "Uses strong action verbs throughout the resume."
+        )
+
+    if report["sections"]["skills"]:
+        strengths.append(
+            "Well-defined technical skills section."
+        )
+
+    if report["sections"]["experience"]:
+        strengths.append(
+            "Includes relevant work experience."
         )
 
     if report["quantified_achievements"]["count"] >= 3:
