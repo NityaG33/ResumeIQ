@@ -5,6 +5,7 @@ from typing import Any, Dict, List
 from pydantic import BaseModel
 from services.match_service import run_match
 from ml.pdf_parser import extract_text_from_pdf
+from fastapi.middleware.cors import CORSMiddleware
 
 from schemas.match_schema import (
     MatchRequest,
@@ -38,6 +39,16 @@ app = FastAPI(
         "and Resume-JD Matching."
     ),
     version="1.0.0",
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:5173",
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 
