@@ -6,6 +6,7 @@ import {
     analyzeResumePDF,
     analyzeResumeText,
 } from "../../services/api";
+import { useNavigate } from "react-router-dom";
 
 function AnalysisForm() {
   const [inputMode, setInputMode] = useState("upload");
@@ -14,6 +15,8 @@ function AnalysisForm() {
   const [jobDescription, setJobDescription] = useState("");
   const [role, setRole] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const navigate = useNavigate();
 
   const handleAnalyze = async () => {
 
@@ -63,7 +66,11 @@ function AnalysisForm() {
 
           }
 
-          console.log(result);
+          navigate("/results", { 
+            state: { 
+              analysis: result, 
+            } 
+          });
 
       } catch (err) {
 

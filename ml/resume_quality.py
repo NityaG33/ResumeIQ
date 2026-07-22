@@ -126,22 +126,76 @@ NUMBER_PATTERN = r"\b\d+(\.\d+)?(%|\+|x|k|m|b)?\b"
 
 def detect_quantified_achievements(resume_text: str) -> dict:
     """
-    Detects measurable achievements such as:
-    35%, 100+, 5 APIs, 10 projects, etc.
+    Detects resume bullet points that contain
+    measurable achievements.
+
+    Example:
+    • Increased API speed by 35%
+    • Solved 400+ DSA problems
     """
 
-    matches = re.findall(
-        NUMBER_PATTERN,
-        resume_text.lower()
-    )
+    lines = [
+        line.strip()
+        for line in resume_text.splitlines()
+        if line.strip()
+    ]
 
-    return {
+    number_pattern = re.compile(r"\b\d+(?:\.\d+)?(?:%|\+|x|k|m|b)?\b", re.IGNORECASE)
 
-        "count": len(matches),
-
-        "present": len(matches) > 0
+    achievement_verbs = {
+        "built",
+        "developed",
+        "designed",
+        "implemented",
+        "optimized",
+        "created",
+        "led",
+        "improved",
+        "automated",
+        "deployed",
+        "engineered",
+        "integrated",
+        "managed",
+        "reduced",
+        "increased",
+        "enhanced",
+        "analyzed",
+        "collaborated",
+        "mentored",
+        "organized",
+        "delivered",
+        "achieved",
+        "launched",
+        "solved",
+        "spearheaded",
+        "streamlined",
+        "innovated",
+        "transformed",
     }
 
+    count = 0
+    matched_lines = []
+
+    for line in lines:
+
+        lower_line = line.lower()
+
+        has_number = bool(number_pattern.search(lower_line))
+
+        has_action = any(
+            verb in lower_line
+            for verb in achievement_verbs
+        )
+
+        if has_number and has_action:
+            count += 1
+            matched_lines.append(line)
+
+    return {
+        "count": count,
+        "present": count > 0,
+        "examples": matched_lines,
+    }
 
 # ACTION VERBS
 
@@ -164,7 +218,7 @@ ACTION_VERBS = {
     "increased",
     "enhanced",
     "analyzed",
-    "collaborated"
+    "collaborated",
 }
 
 def detect_action_verbs(resume_text: str) -> dict:
@@ -192,20 +246,26 @@ def detect_action_verbs(resume_text: str) -> dict:
 
 def detect_bullet_points(resume_text: str) -> dict:
     """
-    Detects whether the resume uses
-    bullet points.
+    Detects actual bullet point entries in the resume.
     """
 
-    bullets = ["•", "-", "*", "–", "→", "»"]
+    lines = resume_text.splitlines()
 
-    count = 0
+    bullet_pattern = re.compile(
+        r"^\s*(?:•|\*|-|–|→|»)\s+"
+    )
 
-    for bullet in bullets:
-        count += resume_text.count(bullet)
+    bullet_lines = []
+
+    for line in lines:
+
+        if bullet_pattern.match(line):
+            bullet_lines.append(line.strip())
 
     return {
-        "count": count,
-        "present": count > 0
+        "count": len(bullet_lines),
+        "present": len(bullet_lines) > 0,
+        "examples": bullet_lines
     }
 
 

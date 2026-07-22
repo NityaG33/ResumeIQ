@@ -30,6 +30,7 @@ class ResumeReportResponse(BaseModel):
     strengths: List[str]
     recommendations: List[str]
     priority_improvements: List[str]
+    score_breakdown: Dict[str, Any]
 
 
 class RecommendationResponse(BaseModel):
