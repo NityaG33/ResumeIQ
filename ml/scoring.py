@@ -1,7 +1,6 @@
 from ml.utilities.config import (
     SKILL_COVERAGE_WEIGHT,
     EMBEDDING_WEIGHT,
-    RESUME_QUALITY_WEIGHT,
     TFIDF_WEIGHT,
     ROLE_ALIGNMENT_WEIGHT,
 )
@@ -49,10 +48,6 @@ def compute_match_score(
         resume_text,
     )
 
-    resume_quality_score = (
-        resume_report["overall_score"] / 100
-    )
-
     
     # TF-IDF
     
@@ -79,7 +74,6 @@ def compute_match_score(
     final_score = (
         coverage_score * SKILL_COVERAGE_WEIGHT
         + embedding_score * EMBEDDING_WEIGHT
-        + resume_quality_score * RESUME_QUALITY_WEIGHT
         + tfidf_score * TFIDF_WEIGHT
         + role_alignment_score * ROLE_ALIGNMENT_WEIGHT
     )
@@ -116,11 +110,6 @@ def compute_match_score(
 
             "embedding_similarity": round(
                 embedding_score * 100,
-                2,
-            ),
-
-            "resume_quality": round(
-                resume_quality_score * 100,
                 2,
             ),
 

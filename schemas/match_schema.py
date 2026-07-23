@@ -8,6 +8,10 @@ class MatchRequest(BaseModel):
     jd_text: str
 
 
+class ResumeQualityRequest(BaseModel):
+    resume_text: str
+
+
 # Response Schemas
 class JDMatchResponse(BaseModel):
     score: float
@@ -19,6 +23,8 @@ class JDMatchResponse(BaseModel):
 
 class ResumeReportResponse(BaseModel):
     overall_score: float
+    resume_quality_score: float
+    ats_score: float
     grade: str
     summary: str
     structure_score: int
@@ -36,6 +42,12 @@ class ResumeReportResponse(BaseModel):
 class RecommendationResponse(BaseModel):
     resume: List[str]
     job_match: List[str]
+
+
+class ResumeQualityResponse(BaseModel):
+    resume_report: ResumeReportResponse
+    recommendations: RecommendationResponse
+    explanation: List[str]
 
 
 class MatchResponse(BaseModel):

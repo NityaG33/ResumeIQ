@@ -22,11 +22,16 @@ function ResumeSummary({ report }) {
         Resume Quality
       </h2>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
 
         <StatCard
-          label="Overall Score"
-          value={`${report.overall_score}%`}
+          label="Resume Quality"
+          value={`${report.resume_quality_score}%`}
+        />
+
+        <StatCard
+          label="ATS Score"
+          value={`${report.ats_score}%`}
         />
 
         <StatCard

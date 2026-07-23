@@ -10,6 +10,7 @@ from ml.utilities.resume_quality_config import (
     CONTACT_WEIGHTS,
     CONTENT_WEIGHTS,
     PROFESSIONAL_WEIGHTS,
+    ATS_WEIGHTS,
     GRADE_THRESHOLDS,
     GRADE_DESCRIPTIONS,
 )
@@ -325,7 +326,19 @@ def analyze_resume_quality(resume_text: str) -> dict:
 
 
 def build_ats_diagnostics(report: dict) -> dict:
+    sections_present = sum(report["sections"].values())
+    contact_present = sum(report["contact_information"].values())
+
+    section_score = (sections_present / len(report["sections"])) * ATS_WEIGHTS["standard_sections"]
+    skills_score = ATS_WEIGHTS["skills_section"] if report["sections"]["skills"] else 0
+    contact_score = (contact_present / len(report["contact_information"])) * ATS_WEIGHTS["contact_information"]
+    length_score = ATS_WEIGHTS["resume_length"] if report["resume_length"]["category"] == "Good" else 0
+    bullet_score = ATS_WEIGHTS["bullet_points"] if report["bullet_points"]["present"] else 0
+
+    ats_score = round(((section_score + skills_score + contact_score + length_score + bullet_score) / 15) * 100, 2)
+
     return {
+        "score": ats_score,
         "sections": report["sections"],
         "contact_information": report["contact_information"],
         "bullet_points": report["bullet_points"],
@@ -748,6 +761,8 @@ def build_resume_report(resume_text: str) -> dict:
 
     return {
         **scores,
+        "resume_quality_score": scores["overall_score"],
+        "ats_score": ats_diagnostics["score"],
         "analysis": analysis,
         "ats_diagnostics": ats_diagnostics,
         "strengths": generate_resume_strengths(analysis),

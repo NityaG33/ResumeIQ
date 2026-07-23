@@ -20,7 +20,11 @@ def explain_match(result: dict) -> list:
     )
 
     explanation.append(
-        f"Resume Quality: {components['resume_quality']}%"
+        f"Resume Quality: {report['resume_quality_score']}%"
+    )
+
+    explanation.append(
+        f"ATS Score: {report['ats_score']}%"
     )
 
     explanation.append(

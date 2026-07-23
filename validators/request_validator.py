@@ -21,9 +21,8 @@ def validate_role(role: str):
         )
 
 
-def validate_text_input(
+def validate_resume_text_input(
     resume_text: str,
-    jd_text: str,
 ):
 
     if not resume_text.strip():
@@ -31,6 +30,14 @@ def validate_text_input(
             status_code=400,
             detail="Resume text cannot be empty."
         )
+
+
+def validate_text_input(
+    resume_text: str,
+    jd_text: str,
+):
+
+    validate_resume_text_input(resume_text)
 
     if not jd_text.strip():
         raise HTTPException(
