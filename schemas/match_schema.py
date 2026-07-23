@@ -25,8 +25,8 @@ class ResumeReportResponse(BaseModel):
     contact_score: int
     content_score: int
     professional_score: int
-    ats_score: int
     analysis: Dict[str, Any]
+    ats_diagnostics: Dict[str, Any]
     strengths: List[str]
     recommendations: List[str]
     priority_improvements: List[str]

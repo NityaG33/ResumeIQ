@@ -38,7 +38,8 @@ function ProgressBar({ value, max }) {
 
 function ResumeBreakdown({ report }) {
   const breakdown = report.score_breakdown;
-  const diagnostics = report.ats_diagnostics || report.analysis;
+  const ats = report.ats_diagnostics;
+  const analysis = report.analysis;
 
   return (
     <div className="bg-white rounded-2xl shadow-md p-8">
@@ -105,22 +106,22 @@ function ResumeBreakdown({ report }) {
                 {section.key === "structure" && (
                   <>
                     <InfoRow
-                      ok={diagnostics.sections.skills}
+                      ok={ats.sections.skills}
                       text="Skills Section"
                     />
 
                     <InfoRow
-                      ok={diagnostics.sections.projects}
+                      ok={ats.sections.projects}
                       text="Projects Section"
                     />
 
                     <InfoRow
-                      ok={diagnostics.sections.education}
+                      ok={ats.sections.education}
                       text="Education Section"
                     />
 
                     <InfoRow
-                      ok={diagnostics.sections.experience}
+                      ok={ats.sections.experience}
                       text="Experience Section"
                     />
                   </>
@@ -129,22 +130,22 @@ function ResumeBreakdown({ report }) {
                 {section.key === "contact" && (
                   <>
                     <InfoRow
-                      ok={diagnostics.contact_information.email}
+                      ok={ats.contact_information.email}
                       text="Email Address"
                     />
 
                     <InfoRow
-                      ok={diagnostics.contact_information.phone}
+                      ok={ats.contact_information.phone}
                       text="Phone Number"
                     />
 
                     <InfoRow
-                      ok={diagnostics.contact_information.github}
+                      ok={ats.contact_information.github}
                       text="GitHub Profile"
                     />
 
                     <InfoRow
-                      ok={diagnostics.contact_information.linkedin}
+                      ok={ats.contact_information.linkedin}
                       text="LinkedIn Profile"
                     />
                   </>
@@ -153,23 +154,23 @@ function ResumeBreakdown({ report }) {
                 {section.key === "content" && (
                   <>
                     <InfoRow
-                      ok={diagnostics.quantified_achievements.present}
-                      text={`${diagnostics.quantified_achievements.count} quantified achievements`}
+                      ok={analysis.quantified_achievements.present}
+                      text={`${analysis.quantified_achievements.count} quantified achievements`}
                     />
 
                     <InfoRow
-                      ok={diagnostics.action_verbs.present}
-                      text={`${diagnostics.action_verbs.count} strong action verbs`}
+                      ok={analysis.action_verbs.present}
+                      text={`${analysis.action_verbs.count} strong action verbs`}
                     />
 
                     <InfoRow
-                      ok={diagnostics.bullet_points.present}
-                      text={`${diagnostics.bullet_points.count} bullet points`}
+                      ok={analysis.bullet_points.present}
+                      text={`${analysis.bullet_points.count} bullet points`}
                     />
 
                     <InfoRow
-                      ok={diagnostics.resume_length.category === "Good"}
-                      text={`Resume Length: ${diagnostics.resume_length.category}`}
+                      ok={analysis.resume_length.category === "Good"}
+                      text={`Resume Length: ${analysis.resume_length.category}`}
                     />
                   </>
                 )}
@@ -177,12 +178,12 @@ function ResumeBreakdown({ report }) {
                 {section.key === "professional" && (
                   <>
                     <InfoRow
-                      ok={diagnostics.contact_information.github}
+                      ok={ats.contact_information.github}
                       text="GitHub Profile Present"
                     />
 
                     <InfoRow
-                      ok={diagnostics.contact_information.linkedin}
+                      ok={ats.contact_information.linkedin}
                       text="LinkedIn Profile Present"
                     />
                   </>
@@ -213,42 +214,42 @@ function ResumeBreakdown({ report }) {
         <div className="space-y-3">
 
           <InfoRow
-            ok={diagnostics.sections.skills}
+            ok={ats.sections.skills}
             text="Skills section detected"
           />
 
           <InfoRow
-            ok={diagnostics.sections.projects}
+            ok={ats.sections.projects}
             text="Projects section detected"
           />
 
           <InfoRow
-            ok={diagnostics.sections.education}
+            ok={ats.sections.education}
             text="Education section detected"
           />
 
           <InfoRow
-            ok={diagnostics.sections.experience}
+            ok={ats.sections.experience}
             text="Experience section detected"
           />
 
           <InfoRow
-            ok={diagnostics.contact_information.email}
+            ok={ats.contact_information.email}
             text="Email address present"
           />
 
           <InfoRow
-            ok={diagnostics.contact_information.phone}
+            ok={ats.contact_information.phone}
             text="Phone number present"
           />
 
           <InfoRow
-            ok={diagnostics.resume_length.category === "Good"}
+            ok={ats.resume_length.category === "Good"}
             text="Resume length is optimal"
           />
 
           <InfoRow
-            ok={diagnostics.bullet_points.present}
+            ok={ats.bullet_points.present}
             text="Uses bullet points"
           />
 

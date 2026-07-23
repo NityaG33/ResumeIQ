@@ -6,13 +6,13 @@ Total Score = 100
 """
 
 
-# Structure Score (25)
+# Structure Score (30)
 
 STRUCTURE_WEIGHTS = {
-    "skills": 6,
-    "projects": 7,
-    "experience": 7,
-    "education": 5,
+    "skills": 8,
+    "projects": 9,
+    "experience": 6,
+    "education": 7,
 }
 
 
@@ -26,21 +26,21 @@ CONTACT_WEIGHTS = {
 }
 
 
-# Content Score (35)
+# Content Score (40)
 
 CONTENT_WEIGHTS = {
-    "quantified": 12,
-    "action_verbs": 10,
+    "quantified": 15,
+    "action_verbs": 11,
     "bullet_points": 5,
-    "resume_length": 8,
+    "resume_length": 9,
 }
 
 
-# Professional Presence (10)
+# Professional Presence (15)
 
 PROFESSIONAL_WEIGHTS = {
-    "github": 5,
-    "linkedin": 5,
+    "github": 9,
+    "linkedin": 6,
 }
 
 

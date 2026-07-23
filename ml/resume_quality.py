@@ -10,7 +10,6 @@ from ml.utilities.resume_quality_config import (
     CONTACT_WEIGHTS,
     CONTENT_WEIGHTS,
     PROFESSIONAL_WEIGHTS,
-    ATS_WEIGHTS,
     GRADE_THRESHOLDS,
     GRADE_DESCRIPTIONS,
 )
@@ -325,6 +324,14 @@ def analyze_resume_quality(resume_text: str) -> dict:
     }
 
 
+def build_ats_diagnostics(report: dict) -> dict:
+    return {
+        "sections": report["sections"],
+        "contact_information": report["contact_information"],
+        "bullet_points": report["bullet_points"],
+        "resume_length": report["resume_length"],
+    }
+
 def get_resume_grade(score: float) -> tuple:
     """
     Returns the resume grade and description.
@@ -485,38 +492,6 @@ def compute_resume_quality_score(report: dict) -> dict:
         professional_score += PROFESSIONAL_WEIGHTS["linkedin"]
 
 
-    # ATS Score
-
-    ats_score = 0
-
-    if report["sections"]["skills"]:
-        ats_score += ATS_WEIGHTS["skills_section"]
-
-    if all(report["sections"].values()):
-        ats_score += ATS_WEIGHTS["standard_sections"]
-
-    if report["contact_information"]["email"] and report["contact_information"]["phone"]:
-        ats_score += ATS_WEIGHTS["contact_information"]
-
-    if report["resume_length"]["category"] == "Good":
-        ats_score += ATS_WEIGHTS["resume_length"]
-
-    bullet_count = report["bullet_points"]["count"]
-
-    if bullet_count >= 6:
-        ats_score += ATS_WEIGHTS["bullet_points"]
-
-    elif bullet_count >= 3:
-        ats_score += round(
-            ATS_WEIGHTS["bullet_points"] * 0.7
-        )
-
-    elif bullet_count >= 1:
-        ats_score += round(
-            ATS_WEIGHTS["bullet_points"] * 0.4
-        )
-
-
     # Overall Score
 
     overall_score = (
@@ -524,7 +499,6 @@ def compute_resume_quality_score(report: dict) -> dict:
         + contact_score
         + content_score
         + professional_score
-        + ats_score
     )
 
     overall_score = round(overall_score, 2)
@@ -556,11 +530,6 @@ def compute_resume_quality_score(report: dict) -> dict:
     "professional": {
         "score": professional_score,
         "max_score": sum(PROFESSIONAL_WEIGHTS.values())
-    },
-
-    "ats": {
-        "score": ats_score,
-        "max_score": sum(ATS_WEIGHTS.values())
     }
 }
 
@@ -572,7 +541,6 @@ def compute_resume_quality_score(report: dict) -> dict:
         "contact_score": contact_score,
         "content_score": content_score,
         "professional_score": professional_score,
-        "ats_score": ats_score,
         "score_breakdown": score_breakdown
     }
 
@@ -776,9 +744,12 @@ def build_resume_report(resume_text: str) -> dict:
 
     scores = compute_resume_quality_score(analysis)
 
+    ats_diagnostics = build_ats_diagnostics(analysis)
+
     return {
         **scores,
         "analysis": analysis,
+        "ats_diagnostics": ats_diagnostics,
         "strengths": generate_resume_strengths(analysis),
         "recommendations": generate_resume_recommendations(analysis),
         "priority_improvements": generate_priority_improvements(analysis)
