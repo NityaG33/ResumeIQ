@@ -9,7 +9,6 @@ from ml.utilities.resume_quality_config import (
     STRUCTURE_WEIGHTS,
     CONTACT_WEIGHTS,
     CONTENT_WEIGHTS,
-    PROFESSIONAL_WEIGHTS,
     ATS_WEIGHTS,
     GRADE_THRESHOLDS,
     GRADE_DESCRIPTIONS,
@@ -326,24 +325,14 @@ def analyze_resume_quality(resume_text: str) -> dict:
 
 
 def build_ats_diagnostics(report: dict) -> dict:
-    sections_present = sum(report["sections"].values())
-    contact_present = sum(report["contact_information"].values())
-
-    section_score = (sections_present / len(report["sections"])) * ATS_WEIGHTS["standard_sections"]
-    skills_score = ATS_WEIGHTS["skills_section"] if report["sections"]["skills"] else 0
-    contact_score = (contact_present / len(report["contact_information"])) * ATS_WEIGHTS["contact_information"]
-    length_score = ATS_WEIGHTS["resume_length"] if report["resume_length"]["category"] == "Good" else 0
-    bullet_score = ATS_WEIGHTS["bullet_points"] if report["bullet_points"]["present"] else 0
-
-    ats_score = round(((section_score + skills_score + contact_score + length_score + bullet_score) / 15) * 100, 2)
 
     return {
-        "score": ats_score,
         "sections": report["sections"],
         "contact_information": report["contact_information"],
         "bullet_points": report["bullet_points"],
         "resume_length": report["resume_length"],
     }
+
 
 def get_resume_grade(score: float) -> tuple:
     """
@@ -412,12 +401,14 @@ def generate_resume_summary(
 
 def compute_resume_quality_score(report: dict) -> dict:
     """
-    Computes Resume Quality Score from
-    the analysis report.
+    Computes the Overall Resume Score (100)
+    using Structure, Content, Contact and
+    ATS Compatibility.
     """
 
-
-    # Structure Score
+    # -----------------------------
+    # Structure Score (30)
+    # -----------------------------
 
     structure_score = 0
 
@@ -425,8 +416,9 @@ def compute_resume_quality_score(report: dict) -> dict:
         if report["sections"][section]:
             structure_score += weight
 
-
-    # Contact Score
+    # -----------------------------
+    # Contact Score (15)
+    # -----------------------------
 
     contact_score = 0
 
@@ -434,8 +426,9 @@ def compute_resume_quality_score(report: dict) -> dict:
         if report["contact_information"][field]:
             contact_score += weight
 
-
-    # Content Score
+    # -----------------------------
+    # Content Score (40)
+    # -----------------------------
 
     content_score = 0
 
@@ -454,15 +447,17 @@ def compute_resume_quality_score(report: dict) -> dict:
             CONTENT_WEIGHTS["quantified"] * 0.5
         )
 
-    if report["action_verbs"]["count"] >= 5:
+    verb_count = report["action_verbs"]["count"]
+
+    if verb_count >= 5:
         content_score += CONTENT_WEIGHTS["action_verbs"]
 
-    elif report["action_verbs"]["count"] >= 3:
+    elif verb_count >= 3:
         content_score += round(
             CONTENT_WEIGHTS["action_verbs"] * 0.7
         )
 
-    elif report["action_verbs"]["count"] >= 1:
+    elif verb_count >= 1:
         content_score += round(
             CONTENT_WEIGHTS["action_verbs"] * 0.4
         )
@@ -470,17 +465,14 @@ def compute_resume_quality_score(report: dict) -> dict:
     bullet_count = report["bullet_points"]["count"]
 
     if bullet_count >= 6:
-
         content_score += CONTENT_WEIGHTS["bullet_points"]
 
     elif bullet_count >= 3:
-
         content_score += round(
             CONTENT_WEIGHTS["bullet_points"] * 0.7
         )
 
     elif bullet_count >= 1:
-
         content_score += round(
             CONTENT_WEIGHTS["bullet_points"] * 0.4
         )
@@ -493,25 +485,43 @@ def compute_resume_quality_score(report: dict) -> dict:
             CONTENT_WEIGHTS["resume_length"] * 0.5
         )
 
+    # -----------------------------
+    # ATS Compatibility Score (15)
+    # -----------------------------
 
-    # Professional Presence
+    sections_present = sum(report["sections"].values())
+    contact_present = sum(report["contact_information"].values())
 
-    professional_score = 0
+    ats_score = 0
 
-    if report["contact_information"]["github"]:
-        professional_score += PROFESSIONAL_WEIGHTS["github"]
+    ats_score += (
+        sections_present / len(report["sections"])
+    ) * ATS_WEIGHTS["standard_sections"]
 
-    if report["contact_information"]["linkedin"]:
-        professional_score += PROFESSIONAL_WEIGHTS["linkedin"]
+    if report["sections"]["skills"]:
+        ats_score += ATS_WEIGHTS["skills_section"]
 
+    ats_score += (
+        contact_present / len(report["contact_information"])
+    ) * ATS_WEIGHTS["contact_information"]
 
-    # Overall Score
+    if report["resume_length"]["category"] == "Good":
+        ats_score += ATS_WEIGHTS["resume_length"]
+
+    if report["bullet_points"]["present"]:
+        ats_score += ATS_WEIGHTS["bullet_points"]
+
+    ats_score = round(ats_score, 2)
+
+    # -----------------------------
+    # Overall Score (100)
+    # -----------------------------
 
     overall_score = (
         structure_score
         + contact_score
         + content_score
-        + professional_score
+        + ats_score
     )
 
     overall_score = round(overall_score, 2)
@@ -523,37 +533,37 @@ def compute_resume_quality_score(report: dict) -> dict:
         overall_score,
     )
 
+    # -----------------------------
+    # Score Breakdown
+    # -----------------------------
+
     score_breakdown = {
 
-    "structure": {
-        "score": structure_score,
-        "max_score": sum(STRUCTURE_WEIGHTS.values())
-    },
+        "structure": {
+            "score": structure_score,
+            "max_score": sum(STRUCTURE_WEIGHTS.values())
+        },
 
-    "contact": {
-        "score": contact_score,
-        "max_score": sum(CONTACT_WEIGHTS.values())
-    },
+        "content": {
+            "score": content_score,
+            "max_score": sum(CONTENT_WEIGHTS.values())
+        },
 
-    "content": {
-        "score": content_score,
-        "max_score": sum(CONTENT_WEIGHTS.values())
-    },
+        "contact": {
+            "score": contact_score,
+            "max_score": sum(CONTACT_WEIGHTS.values())
+        },
 
-    "professional": {
-        "score": professional_score,
-        "max_score": sum(PROFESSIONAL_WEIGHTS.values())
+        "ats": {
+            "score": ats_score,
+            "max_score": sum(ATS_WEIGHTS.values())
+        }
     }
-}
 
     return {
         "overall_score": overall_score,
         "grade": grade,
         "summary": summary,
-        "structure_score": structure_score,
-        "contact_score": contact_score,
-        "content_score": content_score,
-        "professional_score": professional_score,
         "score_breakdown": score_breakdown
     }
 
@@ -753,21 +763,19 @@ def build_resume_report(resume_text: str) -> dict:
     Builds the complete Resume Report.
     """
 
-    analysis = analyze_resume_quality(resume_text)
+    report = analyze_resume_quality(resume_text)
 
-    scores = compute_resume_quality_score(analysis)
+    # Compute scores using the FULL report
+    scores = compute_resume_quality_score(report)
 
-    ats_diagnostics = build_ats_diagnostics(analysis)
+    ats_diagnostics = build_ats_diagnostics(report)
 
     return {
         **scores,
-        "resume_quality_score": scores["overall_score"],
-        "ats_score": ats_diagnostics["score"],
-        "analysis": analysis,
         "ats_diagnostics": ats_diagnostics,
-        "strengths": generate_resume_strengths(analysis),
-        "recommendations": generate_resume_recommendations(analysis),
-        "priority_improvements": generate_priority_improvements(analysis)
+        "strengths": generate_resume_strengths(report),
+        "recommendations": generate_resume_recommendations(report),
+        "priority_improvements": generate_priority_improvements(report),
     }
 
 

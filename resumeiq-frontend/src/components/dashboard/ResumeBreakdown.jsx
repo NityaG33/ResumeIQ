@@ -14,12 +14,12 @@ const sections = [
   {
     key: "content",
     title: "Content Quality",
-    description: "Projects, quantified achievements and readability",
+    description: "Resume readability, bullet points and overall content quality",
   },
   {
-    key: "professional",
-    title: "Professional Presence",
-    description: "Professional profiles and resume completeness",
+    key: "ats",
+    title: "ATS Compatibility",
+    description: "ATS-friendly formatting and resume parsing",
   },
 ];
 
@@ -39,37 +39,29 @@ function ProgressBar({ value, max }) {
 function ResumeBreakdown({ report }) {
   const breakdown = report.score_breakdown;
   const ats = report.ats_diagnostics;
-  const analysis = report.analysis;
 
   return (
     <div className="bg-white rounded-2xl shadow-md p-8">
-
       <h2 className="text-2xl font-bold mb-2">
         Resume Score Breakdown
       </h2>
 
       <p className="text-slate-500 mb-8">
-        Your resume score is calculated using ATS best practices and resume quality metrics.
+        Your resume score is calculated using resume quality metrics and ATS best practices.
       </p>
 
       <div className="space-y-8">
-
         {sections.map((section) => {
-
           const score = breakdown[section.key].score;
           const max = breakdown[section.key].max_score;
 
           return (
-
             <div
               key={section.key}
               className="border rounded-xl p-6"
             >
-
               <div className="flex justify-between items-center">
-
                 <div>
-
                   <h3 className="text-xl font-semibold">
                     {section.title}
                   </h3>
@@ -77,23 +69,17 @@ function ResumeBreakdown({ report }) {
                   <p className="text-slate-500 mt-1">
                     {section.description}
                   </p>
-
                 </div>
 
                 <div className="text-right">
-
                   <p className="text-3xl font-bold">
-
                     {score}
 
                     <span className="text-slate-500 text-xl">
                       {" "} / {max}
                     </span>
-
                   </p>
-
                 </div>
-
               </div>
 
               <ProgressBar
@@ -102,6 +88,8 @@ function ResumeBreakdown({ report }) {
               />
 
               <div className="mt-6 space-y-3">
+
+                {/* Structure */}
 
                 {section.key === "structure" && (
                   <>
@@ -127,6 +115,8 @@ function ResumeBreakdown({ report }) {
                   </>
                 )}
 
+                {/* Contact */}
+
                 {section.key === "contact" && (
                   <>
                     <InfoRow
@@ -151,58 +141,66 @@ function ResumeBreakdown({ report }) {
                   </>
                 )}
 
+                {/* Content */}
+
                 {section.key === "content" && (
                   <>
                     <InfoRow
-                      ok={analysis.quantified_achievements.present}
-                      text={`${analysis.quantified_achievements.count} quantified achievements`}
+                      ok={ats.bullet_points.present}
+                      text={`${ats.bullet_points.count} bullet points`}
                     />
 
                     <InfoRow
-                      ok={analysis.action_verbs.present}
-                      text={`${analysis.action_verbs.count} strong action verbs`}
-                    />
-
-                    <InfoRow
-                      ok={analysis.bullet_points.present}
-                      text={`${analysis.bullet_points.count} bullet points`}
-                    />
-
-                    <InfoRow
-                      ok={analysis.resume_length.category === "Good"}
-                      text={`Resume Length: ${analysis.resume_length.category}`}
+                      ok={ats.resume_length.category === "Good"}
+                      text={`Resume Length: ${ats.resume_length.category}`}
                     />
                   </>
                 )}
 
-                {section.key === "professional" && (
+                {/* ATS */}
+
+                {section.key === "ats" && (
                   <>
                     <InfoRow
-                      ok={ats.contact_information.github}
-                      text="GitHub Profile Present"
+                      ok={ats.sections.skills}
+                      text="Skills Section Detected"
                     />
 
                     <InfoRow
-                      ok={ats.contact_information.linkedin}
-                      text="LinkedIn Profile Present"
+                      ok={ats.sections.projects}
+                      text="Projects Section Detected"
+                    />
+
+                    <InfoRow
+                      ok={ats.sections.education}
+                      text="Education Section Detected"
+                    />
+
+                    <InfoRow
+                      ok={ats.sections.experience}
+                      text="Experience Section Detected"
+                    />
+
+                    <InfoRow
+                      ok={ats.resume_length.category === "Good"}
+                      text="Optimal Resume Length"
+                    />
+
+                    <InfoRow
+                      ok={ats.bullet_points.present}
+                      text="Uses Bullet Points"
                     />
                   </>
                 )}
-
               </div>
-
             </div>
-
           );
-
         })}
-
       </div>
 
       {/* ATS Checklist */}
 
       <div className="mt-12 border-t pt-8">
-
         <h2 className="text-2xl font-bold mb-2">
           ATS Compatibility Checklist
         </h2>
@@ -212,7 +210,6 @@ function ResumeBreakdown({ report }) {
         </p>
 
         <div className="space-y-3">
-
           <InfoRow
             ok={ats.sections.skills}
             text="Skills section detected"
@@ -252,11 +249,8 @@ function ResumeBreakdown({ report }) {
             ok={ats.bullet_points.present}
             text="Uses bullet points"
           />
-
         </div>
-
       </div>
-
     </div>
   );
 }
@@ -264,7 +258,6 @@ function ResumeBreakdown({ report }) {
 function InfoRow({ ok, text }) {
   return (
     <div className="flex items-center gap-3">
-
       {ok ? (
         <CheckCircle
           className="text-green-600"
@@ -280,7 +273,6 @@ function InfoRow({ ok, text }) {
       <p className="text-slate-700">
         {text}
       </p>
-
     </div>
   );
 }

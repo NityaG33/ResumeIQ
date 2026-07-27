@@ -141,9 +141,8 @@ def analyze_resume_quality_only(
             "job_match": [],
         },
         "explanation": [
-            f"Resume Quality: {resume_report['resume_quality_score']}%",
-            f"ATS Score: {resume_report['ats_score']}%",
-            "Resume quality analysis completed independently from JD matching.",
+            f"Overall Resume Score: {resume_report['overall_score']}/100",
+            resume_report["summary"],
         ],
     }
 
@@ -287,9 +286,8 @@ async def analyze_resume_quality_pdf(
                 "job_match": [],
             },
             "explanation": [
-                f"Resume Quality: {resume_report['resume_quality_score']}%",
-                f"ATS Score: {resume_report['ats_score']}%",
-                "Resume quality analysis completed independently from JD matching.",
+                f"Overall Resume Score: {resume_report['overall_score']}/100",
+                resume_report["summary"],
             ],
         }
 

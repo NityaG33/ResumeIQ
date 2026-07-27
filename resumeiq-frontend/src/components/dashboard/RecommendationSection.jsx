@@ -1,27 +1,25 @@
 import { Lightbulb } from "lucide-react";
 
 function RecommendationList({ title, recommendations }) {
+  const items = recommendations ?? [];
+
   return (
     <div>
-
       <h3 className="text-xl font-semibold mb-5">
         {title}
       </h3>
 
-      {recommendations.length === 0 ? (
+      {items.length === 0 ? (
         <p className="text-slate-500 italic">
           No recommendations.
         </p>
       ) : (
         <div className="space-y-4">
-
-          {recommendations.map((item, index) => (
-
+          {items.map((item, index) => (
             <div
               key={index}
               className="flex items-start gap-3"
             >
-
               <Lightbulb
                 className="text-yellow-500 mt-1"
                 size={20}
@@ -30,14 +28,10 @@ function RecommendationList({ title, recommendations }) {
               <p className="text-slate-700">
                 {item}
               </p>
-
             </div>
-
           ))}
-
         </div>
       )}
-
     </div>
   );
 }

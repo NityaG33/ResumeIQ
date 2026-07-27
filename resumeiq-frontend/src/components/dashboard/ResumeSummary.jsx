@@ -1,7 +1,6 @@
 function StatCard({ label, value }) {
   return (
     <div className="bg-slate-50 rounded-xl p-4 text-center">
-
       <p className="text-slate-500 text-sm">
         {label}
       </p>
@@ -9,7 +8,6 @@ function StatCard({ label, value }) {
       <h3 className="text-2xl font-bold mt-2">
         {value}
       </h3>
-
     </div>
   );
 }
@@ -25,13 +23,8 @@ function ResumeSummary({ report }) {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
 
         <StatCard
-          label="Resume Quality"
-          value={`${report.resume_quality_score}%`}
-        />
-
-        <StatCard
-          label="ATS Score"
-          value={`${report.ats_score}%`}
+          label="Overall Score"
+          value={`${report.overall_score}/100`}
         />
 
         <StatCard
@@ -41,7 +34,16 @@ function ResumeSummary({ report }) {
 
         <StatCard
           label="Resume Length"
-          value={report.analysis.resume_length.category}
+          value={report.ats_diagnostics.resume_length.category}
+        />
+
+        <StatCard
+          label="Sections Found"
+          value={
+            Object.values(report.ats_diagnostics.sections).filter(Boolean).length +
+            " / " +
+            Object.keys(report.ats_diagnostics.sections).length
+          }
         />
 
       </div>

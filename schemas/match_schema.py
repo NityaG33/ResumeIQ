@@ -23,20 +23,13 @@ class JDMatchResponse(BaseModel):
 
 class ResumeReportResponse(BaseModel):
     overall_score: float
-    resume_quality_score: float
-    ats_score: float
     grade: str
     summary: str
-    structure_score: int
-    contact_score: int
-    content_score: int
-    professional_score: int
-    analysis: Dict[str, Any]
+    score_breakdown: Dict[str, Any]
     ats_diagnostics: Dict[str, Any]
     strengths: List[str]
     recommendations: List[str]
     priority_improvements: List[str]
-    score_breakdown: Dict[str, Any]
 
 
 class RecommendationResponse(BaseModel):

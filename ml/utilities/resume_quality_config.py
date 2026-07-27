@@ -36,13 +36,6 @@ CONTENT_WEIGHTS = {
 }
 
 
-# Professional Presence (15)
-
-PROFESSIONAL_WEIGHTS = {
-    "github": 9,
-    "linkedin": 6,
-}
-
 
 # ATS Friendliness (15)
 
