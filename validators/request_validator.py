@@ -1,6 +1,6 @@
 from fastapi import (
-    FastAPI,
     HTTPException,
+    UploadFile,
 )
 
 SUPPORTED_ROLES = {
@@ -43,4 +43,21 @@ def validate_text_input(
         raise HTTPException(
             status_code=400,
             detail="Job description cannot be empty."
+        )
+
+
+def validate_jd_text(jd_text: str):
+    if not jd_text.strip():
+        raise HTTPException(
+            status_code=400,
+            detail="Job description cannot be empty."
+        )
+
+    
+
+def validate_resume_file(resume_file: UploadFile):  
+    if resume_file.content_type != "application/pdf":
+        raise HTTPException(
+            status_code=400,
+            detail="Only PDF resumes are supported."
         )

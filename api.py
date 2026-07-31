@@ -1,24 +1,22 @@
 import os
 import shutil
 import traceback
-from typing import Any, Dict, List
-from pydantic import BaseModel
 from services.match_service import run_match
 from ml.resume_quality import build_resume_report
 from ml.pdf_parser import extract_text_from_pdf
 from fastapi.middleware.cors import CORSMiddleware
+from utils.pdf_utils import extract_resume_text_from_upload
 
 from schemas.match_schema import (
     MatchRequest,
     MatchResponse,
     ResumeQualityRequest,
     ResumeQualityResponse,
-    JDMatchResponse,
-    ResumeReportResponse,
-    RecommendationResponse,
 )
 
 from validators.request_validator import (
+    validate_jd_text,
+    validate_resume_file,
     validate_role,
     validate_resume_text_input,
     validate_text_input,
@@ -126,13 +124,9 @@ def analyze_resume_quality_only(
     request: ResumeQualityRequest,
 ):
 
-    validate_resume_text_input(
-        request.resume_text,
-    )
+    validate_resume_text_input(request.resume_text)
 
-    resume_report = build_resume_report(
-        request.resume_text,
-    )
+    resume_report = build_resume_report(request.resume_text)
 
     return {
         "resume_report": resume_report,
@@ -160,18 +154,8 @@ async def match_pdf(
 ):
 
     validate_role(role)
-
-    if not jd_text.strip():
-        raise HTTPException(
-            status_code=400,
-            detail="Job description cannot be empty."
-        )
-
-    if resume_file.content_type != "application/pdf":
-        raise HTTPException(
-            status_code=400,
-            detail="Only PDF resumes are supported."
-        )
+    validate_jd_text(jd_text)
+    validate_resume_file(resume_file)
 
     os.makedirs(
         "uploads",
@@ -184,25 +168,7 @@ async def match_pdf(
     )
 
     try:
-        with open(
-            upload_path,
-            "wb",
-        ) as buffer:
-
-            shutil.copyfileobj(
-                resume_file.file,
-                buffer,
-            )
-
-        resume_text = extract_text_from_pdf(
-            upload_path
-        )
-
-        if not resume_text.strip():
-            raise HTTPException(
-                status_code=400,
-                detail="Unable to extract text from the uploaded PDF."
-            )
+        resume_text = extract_resume_text_from_upload(resume_file)
 
         result = run_match(
             resume_text,
@@ -239,11 +205,7 @@ async def analyze_resume_quality_pdf(
     resume_file: UploadFile = File(...),
 ):
 
-    if resume_file.content_type != "application/pdf":
-        raise HTTPException(
-            status_code=400,
-            detail="Only PDF resumes are supported."
-        )
+    validate_resume_file(resume_file)
 
     os.makedirs(
         "uploads",
@@ -256,24 +218,7 @@ async def analyze_resume_quality_pdf(
     )
 
     try:
-        with open(
-            upload_path,
-            "wb",
-        ) as buffer:
-            shutil.copyfileobj(
-                resume_file.file,
-                buffer,
-            )
-
-        resume_text = extract_text_from_pdf(
-            upload_path
-        )
-
-        if not resume_text.strip():
-            raise HTTPException(
-                status_code=400,
-                detail="Unable to extract text from the uploaded PDF."
-            )
+        resume_text = extract_resume_text_from_upload(resume_file)
 
         resume_report = build_resume_report(
             resume_text,
