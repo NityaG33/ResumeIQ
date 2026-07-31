@@ -1,9 +1,6 @@
-import os
-import shutil
 import traceback
 from services.match_service import run_match
 from ml.resume_quality import build_resume_report
-from ml.pdf_parser import extract_text_from_pdf
 from fastapi.middleware.cors import CORSMiddleware
 from utils.pdf_utils import extract_resume_text_from_upload
 
@@ -16,7 +13,6 @@ from schemas.match_schema import (
 
 from validators.request_validator import (
     validate_jd_text,
-    validate_resume_file,
     validate_role,
     validate_resume_text_input,
     validate_text_input,
@@ -155,17 +151,6 @@ async def match_pdf(
 
     validate_role(role)
     validate_jd_text(jd_text)
-    validate_resume_file(resume_file)
-
-    os.makedirs(
-        "uploads",
-        exist_ok=True,
-    )
-
-    upload_path = os.path.join(
-        "uploads",
-        resume_file.filename,
-    )
 
     try:
         resume_text = extract_resume_text_from_upload(resume_file)
@@ -190,10 +175,6 @@ async def match_pdf(
             detail=f"Internal Server Error: {str(e)}"
         )
 
-    finally:
-        if os.path.exists(upload_path):
-            os.remove(upload_path)
-
 
 # Resume PDF Quality Endpoint
 
@@ -205,17 +186,6 @@ async def analyze_resume_quality_pdf(
     resume_file: UploadFile = File(...),
 ):
 
-    validate_resume_file(resume_file)
-
-    os.makedirs(
-        "uploads",
-        exist_ok=True,
-    )
-
-    upload_path = os.path.join(
-        "uploads",
-        resume_file.filename,
-    )
 
     try:
         resume_text = extract_resume_text_from_upload(resume_file)
@@ -245,7 +215,3 @@ async def analyze_resume_quality_pdf(
             status_code=500,
             detail=f"Internal Server Error: {str(e)}"
         )
-
-    finally:
-        if os.path.exists(upload_path):
-            os.remove(upload_path)

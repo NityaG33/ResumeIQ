@@ -1,22 +1,15 @@
 import os
 import shutil
-
 from fastapi import UploadFile, HTTPException
-
 from ml.pdf_parser import extract_text_from_pdf
 from validators.request_validator import validate_resume_file
 
 
-def extract_resume_text_from_upload(
-    resume_file: UploadFile,
-) -> str:
+def extract_resume_text_from_upload(resume_file: UploadFile) -> str:
 
     validate_resume_file(resume_file)
 
-    os.makedirs(
-        "uploads",
-        exist_ok=True,
-    )
+    os.makedirs("uploads", exist_ok=True)
 
     upload_path = os.path.join(
         "uploads",
