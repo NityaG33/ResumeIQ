@@ -229,4 +229,22 @@ SKILL_ALIASES = {
     ]
 }
 
+def build_alias_lookup() -> dict[str, str]:
+    """Build a lookup from every alias to its canonical skill name."""
+    aliases = []
+
+    for canonical_skill, skill_aliases in SKILL_ALIASES.items():
+        for alias in skill_aliases:
+            aliases.append((alias, canonical_skill))
+
+    return {
+        alias: canonical_skill
+        for alias, canonical_skill in sorted(
+            aliases,
+            key=lambda item: len(item[0]),
+            reverse=True,
+        )
+    }
+
+
 CANONICAL_SKILLS = set(SKILL_ALIASES.keys())

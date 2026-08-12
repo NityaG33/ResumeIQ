@@ -188,11 +188,9 @@ async def analyze_resume_quality_pdf(
 
 
     try:
+        
         resume_text = extract_resume_text_from_upload(resume_file)
-
-        resume_report = build_resume_report(
-            resume_text,
-        )
+        resume_report = build_resume_report(resume_text)
 
         return {
             "resume_report": resume_report,

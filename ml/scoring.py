@@ -5,10 +5,10 @@ from ml.utilities.config import (
     ROLE_ALIGNMENT_WEIGHT,
 )
 
-from .skill_coverage import compute_skill_coverage
-from .embedding_similarity import embedding_similarity
-from .similarity import text_similarity
-from .role_alignment import compute_role_alignment
+from .skills.skill_coverage import compute_skill_coverage
+from .embeddings.embedding_similarity import embedding_similarity
+from .tfidf.similarity import text_similarity
+from .roles.role_alignment import compute_role_alignment
 from .resume_quality import (
     build_resume_report,
 )
@@ -24,18 +24,15 @@ def compute_match_score(
 
     
     # Skill Coverage
-    
     coverage = compute_skill_coverage(
         resume_text,
         jd_text,
-        role,
     )
 
     coverage_score = coverage["coverage"]
 
     
     # Embedding Similarity
-
     embedding_score = embedding_similarity(
         resume_text,
         jd_text,
@@ -43,14 +40,12 @@ def compute_match_score(
 
     
     # Resume Report
-
     resume_report = build_resume_report(
         resume_text,
     )
 
     
     # TF-IDF
-    
     tfidf_score = text_similarity(
         resume_text,
         jd_text,
@@ -58,7 +53,6 @@ def compute_match_score(
 
     
     # Role Alignment
-    
     role_alignment = compute_role_alignment(
         resume_text,
         role,
@@ -70,7 +64,6 @@ def compute_match_score(
 
     
     # Final Weighted Score
-    
     final_score = (
         coverage_score * SKILL_COVERAGE_WEIGHT
         + embedding_score * EMBEDDING_WEIGHT
@@ -90,15 +83,10 @@ def compute_match_score(
     )
 
     return {
-
         "final_score": final_percentage,
-
         "confidence": confidence,
-
         "skill_coverage": coverage,
-
         "resume_report": resume_report,
-
         "role_alignment": role_alignment,
 
         "component_scores": {

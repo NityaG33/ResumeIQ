@@ -1,4 +1,4 @@
-from .skill_extraction import categorize_skills
+from .skills.skill_extraction import categorize_skills
 
 
 def explain_match(result: dict) -> list:

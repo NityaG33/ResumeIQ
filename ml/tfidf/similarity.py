@@ -1,7 +1,7 @@
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
-from .text_processing import clean_and_normalize
-from .skill_extraction import categorize_skills, extract_skills
+from ml.skills.text_processing import clean_and_normalize
+from ml.skills.skill_extraction import categorize_skills, extract_skills
 
 def text_similarity(resume_text: str, jd_text: str) -> float:
     documents = [
