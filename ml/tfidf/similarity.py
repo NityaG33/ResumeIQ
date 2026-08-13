@@ -14,20 +14,3 @@ def text_similarity(resume_text: str, jd_text: str) -> float:
 
     score = cosine_similarity(tfidf_matrix[0:1], tfidf_matrix[1:2])
     return score[0][0]
-
-
-def skill_similarity(resume_text: str, jd_text: str, role: str) -> float:
-    skill_analysis = categorize_skills(
-        resume_text,
-        jd_text,
-        role
-    )
-
-    matched = skill_analysis["matched"]
-
-    jd_skills = extract_skills(jd_text)
-
-    if not jd_skills:
-        return 0.0
-
-    return len(matched) / len(jd_skills)

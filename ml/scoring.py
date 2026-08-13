@@ -3,6 +3,10 @@ from ml.utilities.config import (
     EMBEDDING_WEIGHT,
     TFIDF_WEIGHT,
     ROLE_ALIGNMENT_WEIGHT,
+    EMBEDDING_CALIBRATION_MIN,
+    EMBEDDING_CALIBRATION_MAX,
+    TFIDF_CALIBRATION_MIN,
+    TFIDF_CALIBRATION_MAX,
 )
 
 from .skills.skill_coverage import compute_skill_coverage
@@ -12,6 +16,23 @@ from .roles.role_alignment import compute_role_alignment
 from .resume_quality import (
     build_resume_report,
 )
+
+
+def normalize_score(
+    score: float,
+    minimum: float,
+    maximum: float,
+) -> float:
+
+    normalized = (
+        (score - minimum)
+        / (maximum - minimum)
+    )
+
+    return max(
+        0.0,
+        min(1.0, normalized)
+    )
 
 
 def compute_match_score(
@@ -33,9 +54,15 @@ def compute_match_score(
 
     
     # Embedding Similarity
-    embedding_score = embedding_similarity(
+    raw_embedding_score = embedding_similarity(
         resume_text,
         jd_text,
+    )
+
+    embedding_score = normalize_score(
+        raw_embedding_score,
+        EMBEDDING_CALIBRATION_MIN,
+        EMBEDDING_CALIBRATION_MAX,
     )
 
     
@@ -46,9 +73,15 @@ def compute_match_score(
 
     
     # TF-IDF
-    tfidf_score = text_similarity(
+    raw_tfidf_score = text_similarity(
         resume_text,
         jd_text,
+    )
+
+    tfidf_score = normalize_score(
+        raw_tfidf_score,
+        TFIDF_CALIBRATION_MIN,
+        TFIDF_CALIBRATION_MAX,
     )
 
     

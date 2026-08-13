@@ -90,30 +90,6 @@ ROLE_RECOMMENDATIONS = {
             "Build a full-stack application using MongoDB as the database."
     },
 
-    "fullstack": {
-
-        "react":
-            "Develop responsive React interfaces integrated with backend APIs.",
-
-        "backend":
-            "Build REST APIs with proper authentication and validation.",
-
-        "python":
-            "Use Python FastAPI or Django for backend development.",
-
-        "sql":
-            "Use relational databases and explain schema design in your projects.",
-
-        "mongodb":
-            "Demonstrate NoSQL database design using MongoDB.",
-
-        "docker":
-            "Containerize your complete full-stack application.",
-
-        "cloud":
-            "Deploy both frontend and backend applications to the cloud."
-    },
-
     "ml_engineer": {
 
         "python":

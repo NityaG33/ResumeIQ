@@ -2,14 +2,14 @@ function MatchScore({ score, confidence }) {
   const color =
     score >= 80
       ? "text-green-600"
-      : score >= 60
+      : score >= 50
       ? "text-yellow-500"
       : "text-red-500";
 
   const ring =
     score >= 80
       ? "border-green-500"
-      : score >= 60
+      : score >= 50
       ? "border-yellow-500"
       : "border-red-500";
 

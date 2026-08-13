@@ -1,0 +1,44 @@
+Job Description
+
+We are seeking a Software Engineer to design, develop, test, and maintain high-quality software applications. The role requires strong computer science fundamentals, programming ability, problem-solving skills, and familiarity with modern software development practices.
+
+Responsibilities
+
+* Design and implement software features using languages such as C++, Java, or Python.
+* Apply data structures, algorithms, object-oriented programming, and software engineering principles to solve complex problems.
+* Develop modular, maintainable, and testable application components.
+* Analyze requirements and translate them into reliable technical solutions.
+* Work with relational databases and write efficient SQL queries when required.
+* Develop and consume RESTful APIs and integrate software components across services.
+* Debug, test, and optimize applications for correctness, performance, and reliability.
+* Write unit tests and participate in code reviews and technical discussions.
+* Use Git and GitHub for source control and collaborative development.
+* Work with cross-functional engineering teams throughout the software development lifecycle.
+* Understand fundamental operating system and computer networking concepts.
+* Contribute to CI/CD, deployment, and containerized development workflows where applicable.
+
+Required Skills
+
+* Strong Data Structures and Algorithms knowledge.
+* Strong programming fundamentals in C++, Java, or Python.
+* Object-Oriented Programming.
+* Problem-solving and analytical thinking.
+* Software development and debugging fundamentals.
+* SQL and database fundamentals.
+* Git and GitHub.
+* Understanding of REST APIs and HTTP.
+* Basic knowledge of Operating Systems and Computer Networks.
+
+Preferred Skills
+
+* Experience with Java or C++ development.
+* Python scripting.
+* Docker and CI/CD.
+* Cloud platforms such as AWS, Azure, or Google Cloud.
+* Unit testing and automated testing.
+* Familiarity with microservices and distributed systems.
+* Knowledge of system design fundamentals.
+
+Education
+
+Bachelor's or Master's degree in Computer Science, Information Technology, Software Engineering, or a related technical discipline.

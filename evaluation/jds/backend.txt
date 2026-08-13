@@ -1,0 +1,41 @@
+Job Description
+
+We are looking for a Backend Software Engineer to design, develop, and maintain reliable server-side applications and APIs. The ideal candidate should have a strong foundation in data structures, algorithms, object-oriented programming, databases, and backend system development.
+
+Responsibilities
+
+* Design and develop scalable backend services and RESTful APIs using Python, Java, or similar backend technologies.
+* Build and maintain server-side applications with clean, modular, and maintainable architecture.
+* Develop database-driven applications using relational databases such as PostgreSQL or MySQL and work with SQL queries, schema design, indexing, and data modeling.
+* Work with NoSQL databases such as MongoDB when required by application requirements.
+* Implement authentication, authorization, validation, error handling, and API security.
+* Optimize backend services for performance, reliability, and maintainability.
+* Integrate third-party APIs and external services into backend applications.
+* Write unit tests and integration tests and participate in debugging and code reviews.
+* Use Git and GitHub for version control and collaborative software development.
+* Work with frontend developers to integrate APIs and deliver complete web applications.
+* Contribute to deployment and containerized development workflows using Docker and basic cloud services.
+
+Required Skills
+
+* Strong programming fundamentals and problem-solving skills.
+* Data Structures and Algorithms.
+* Object-Oriented Programming and software design principles.
+* Proficiency in Python or Java.
+* Strong SQL and relational database fundamentals.
+* Experience developing REST APIs and backend services.
+* Familiarity with Git and GitHub.
+* Understanding of HTTP, client-server architecture, and API communication.
+
+Preferred Skills
+
+* Node.js and Express.js.
+* MongoDB or other NoSQL databases.
+* FastAPI, Spring Boot, or similar backend frameworks.
+* Docker and basic cloud concepts.
+* Unit testing and automated testing.
+* Knowledge of operating systems and computer networks.
+
+Education
+
+Bachelor's degree in Computer Science, Information Technology, Software Engineering, or a related technical field.

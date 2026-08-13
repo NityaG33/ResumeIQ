@@ -1,0 +1,45 @@
+Job Description
+
+We are looking for a Machine Learning Engineer to develop, evaluate, and deploy machine learning solutions for real-world applications. The ideal candidate should combine strong programming and mathematical foundations with practical experience in machine learning, data processing, and model development.
+
+Responsibilities
+
+* Develop and implement machine learning models for classification, regression, recommendation, and prediction tasks.
+* Process, clean, transform, and analyze structured and unstructured datasets using Python.
+* Build machine learning pipelines covering data preprocessing, feature engineering, model training, evaluation, and inference.
+* Use libraries such as Scikit-learn, NumPy, Pandas, and related Python tools.
+* Evaluate models using appropriate metrics and perform hyperparameter tuning to improve performance.
+* Apply supervised and unsupervised learning techniques to solve business and engineering problems.
+* Develop NLP or computer vision solutions when required by project requirements.
+* Build APIs and services for serving trained machine learning models.
+* Work with SQL and databases to retrieve, store, and process application data.
+* Track experiments, maintain reproducible workflows, and document model development.
+* Use Git and GitHub for version control and collaborative development.
+* Deploy machine learning applications using Docker and cloud-based infrastructure where required.
+
+Required Skills
+
+* Strong Python programming skills.
+* Machine Learning fundamentals and practical model development.
+* Scikit-learn.
+* NumPy and Pandas.
+* Data preprocessing and feature engineering.
+* Model evaluation and validation.
+* Understanding of statistics and probability.
+* SQL and database fundamentals.
+* Data Structures and Algorithms.
+* Git and GitHub.
+
+Preferred Skills
+
+* Natural Language Processing or Computer Vision.
+* TensorFlow or PyTorch.
+* Deep Learning and neural networks.
+* FastAPI or Flask for model serving.
+* Docker and cloud platforms.
+* Experience with embeddings, vector similarity, or information retrieval.
+* Familiarity with MLOps concepts and model deployment.
+
+Education
+
+Bachelor's or Master's degree in Computer Science, Artificial Intelligence, Data Science, Machine Learning, or a related technical field.

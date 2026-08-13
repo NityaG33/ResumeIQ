@@ -31,9 +31,9 @@ function Results() {
 
                 {isJDMatchMode ? (
                     <>
-                        <div className="mb-8">
+                        {/* <div className="mb-8">
                             <h2 className="text-3xl font-bold mb-4">JD Matching</h2>
-                        </div>
+                        </div> */}
 
                         <MatchScore
                             score={analysis.jd_match.score}
@@ -60,9 +60,9 @@ function Results() {
                     </>
                 ) : (
                     <>
-                        <div className="mt-10 mb-8">
+                        {/* <div className="mt-10 mb-8">
                             <h2 className="text-3xl font-bold mb-4">Resume Scoring</h2>
-                        </div>
+                        </div> */}
 
                         <div className="mt-10">
                             <ResumeSummary
