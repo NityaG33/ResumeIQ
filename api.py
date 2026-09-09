@@ -3,6 +3,8 @@ from services.match_service import run_match
 from ml.resume_quality import build_resume_report
 from fastapi.middleware.cors import CORSMiddleware
 from utils.pdf_utils import extract_resume_text_from_upload
+from auth.routes import router as auth_router
+from auth.dependencies import get_current_user
 
 from schemas.match_schema import (
     MatchRequest,
@@ -24,6 +26,7 @@ from fastapi import (
     UploadFile,
     File,
     Form,
+    Depends,
 )
 
 
@@ -37,6 +40,11 @@ app = FastAPI(
         "and Resume-JD Matching."
     ),
     version="1.0.0",
+)
+
+app.include_router(
+    auth_router,
+    prefix="/api/v1"
 )
 
 app.add_middleware(
@@ -81,6 +89,7 @@ def root():
 )
 def match_resume(
     request: MatchRequest,
+    current_user: dict = Depends(get_current_user),
 ):
 
     try:
@@ -118,6 +127,7 @@ def match_resume(
 )
 def analyze_resume_quality_only(
     request: ResumeQualityRequest,
+    current_user: dict = Depends(get_current_user),
 ):
 
     validate_resume_text_input(request.resume_text)
@@ -147,6 +157,7 @@ async def match_pdf(
     resume_file: UploadFile = File(...),
     role: str = Form(...),
     jd_text: str = Form(...),
+    current_user: dict = Depends(get_current_user),
 ):
 
     validate_role(role)
@@ -184,6 +195,7 @@ async def match_pdf(
 )
 async def analyze_resume_quality_pdf(
     resume_file: UploadFile = File(...),
+    current_user: dict = Depends(get_current_user),
 ):
 
 
