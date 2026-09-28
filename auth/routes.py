@@ -86,3 +86,15 @@ def login(
     return {
         "message": "Login successful"
     }
+
+
+@router.post("/logout")
+def logout(response: Response):
+    response.delete_cookie(
+        key="access_token",
+        httponly=True,
+        secure=True,
+        samesite="lax"
+    )
+
+    return {"message": "Logout successful"}

@@ -1,3 +1,4 @@
+// The Bridge Between FastAPI and React Frontend
 import axios from "axios";
 
 const api = axios.create({
