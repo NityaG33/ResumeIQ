@@ -1,4 +1,10 @@
-import { useLocation, Navigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import {
+    useLocation,
+    useParams,
+    Navigate,
+} from "react-router-dom";
+
 import Layout from "../components/common/Layout";
 import MatchScore from "../components/dashboard/MatchScore";
 import ComponentScores from "../components/dashboard/ComponentScores";
@@ -9,12 +15,84 @@ import RecommendationSection from "../components/dashboard/RecommendationSection
 import ResumeBreakdown from "../components/dashboard/ResumeBreakdown";
 import RoleAlignment from "../components/dashboard/RoleAlignment";
 
+import { getAnalysis } from "../services/api";
+
 function Results() {
     const location = useLocation();
+    const { analysisId } = useParams();
 
-    const analysis = location.state?.analysis;
-    const analysisMode = location.state?.analysisMode || (analysis?.jd_match ? "match" : "quality");
+    const [analysis, setAnalysis] = useState(
+        location.state?.analysis || null
+    );
 
+    const [analysisMode, setAnalysisMode] = useState(
+        location.state?.analysisMode ||
+        (location.state?.analysis?.jd_match ? "match" : "quality")
+    );
+
+    const [loading, setLoading] = useState(
+        Boolean(analysisId && !location.state?.analysis)
+    );
+
+    const [error, setError] = useState("");
+
+    // Fetch saved analysis when opened from History
+    useEffect(() => {
+        if (!analysisId || analysis) {
+            return;
+        }
+
+        const fetchAnalysis = async () => {
+            try {
+                const data = await getAnalysis(analysisId);
+
+                setAnalysis(data.result);
+
+                setAnalysisMode(
+                    data.analysis_type === "jd_match"
+                        ? "match"
+                        : "quality"
+                );
+            } catch (err) {
+                setError(
+                    err.response?.data?.detail ||
+                    "Failed to load analysis."
+                );
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchAnalysis();
+    }, [analysisId, analysis]);
+
+    // Loading state
+    if (loading) {
+        return (
+            <Layout>
+                <div className="max-w-7xl mx-auto py-20 text-center">
+                    <p className="text-slate-500">
+                        Loading analysis...
+                    </p>
+                </div>
+            </Layout>
+        );
+    }
+
+    // Error state
+    if (error) {
+        return (
+            <Layout>
+                <div className="max-w-7xl mx-auto py-20 text-center">
+                    <p className="text-red-600">
+                        {error}
+                    </p>
+                </div>
+            </Layout>
+        );
+    }
+
+    // No analysis available
     if (!analysis) {
         return <Navigate to="/" replace />;
     }
@@ -26,15 +104,13 @@ function Results() {
             <div className="max-w-7xl mx-auto py-12">
 
                 <h1 className="text-4xl font-bold mb-8">
-                    {isJDMatchMode ? "JD Match Analysis" : "Resume Quality Analysis"}
+                    {isJDMatchMode
+                        ? "JD Match Analysis"
+                        : "Resume Quality Analysis"}
                 </h1>
 
                 {isJDMatchMode ? (
                     <>
-                        {/* <div className="mb-8">
-                            <h2 className="text-3xl font-bold mb-4">JD Matching</h2>
-                        </div> */}
-
                         <MatchScore
                             score={analysis.jd_match.score}
                             confidence={analysis.jd_match.confidence}
@@ -60,10 +136,6 @@ function Results() {
                     </>
                 ) : (
                     <>
-                        {/* <div className="mt-10 mb-8">
-                            <h2 className="text-3xl font-bold mb-4">Resume Scoring</h2>
-                        </div> */}
-
                         <div className="mt-10">
                             <ResumeSummary
                                 report={analysis.resume_report}

@@ -1,5 +1,4 @@
 import traceback
-
 from fastapi import (
     APIRouter,
     Depends,
@@ -8,37 +7,30 @@ from fastapi import (
     File,
     Form,
 )
-
 from auth.dependencies import get_current_user
-
 from services.match_service import run_match
-
 from services.analysis_service import (
     create_analysis,
     get_user_analyses,
     get_user_analysis,
     delete_user_analysis,
 )
-
 from services.resume_service import create_resume
-
 from ml.resume_quality import build_resume_report
-
 from utils.pdf_utils import extract_resume_text_from_upload
-
 from schemas.match_schema import (
     MatchRequest,
     MatchResponse,
     ResumeQualityRequest,
     ResumeQualityResponse,
 )
-
 from validators.request_validator import (
     validate_jd_text,
     validate_role,
     validate_resume_text_input,
     validate_text_input,
 )
+from schemas.analysis_schema import AnalysisResponse
 
 
 router = APIRouter(
@@ -233,7 +225,10 @@ async def analyze_resume_quality_pdf(
     
 
 # User Analyses Retrieval Endpoint
-@router.get("/analyses")
+@router.get(
+    "/analyses",
+    response_model=list[AnalysisResponse],
+)
 def get_analyses(
     current_user: dict = Depends(get_current_user),
 ):
@@ -242,13 +237,16 @@ def get_analyses(
     )
 
     for analysis in analyses:
-        analysis["_id"] = str(analysis["_id"])
+        analysis["id"] = str(analysis.pop("_id"))
 
     return analyses
 
 
 # Single Analysis Retrieval Endpoint
-@router.get("/analyses/{analysis_id}")
+@router.get(
+    "/analyses/{analysis_id}",
+    response_model=AnalysisResponse,
+)
 def get_analysis(
     analysis_id: str,
     current_user: dict = Depends(get_current_user),
@@ -264,7 +262,7 @@ def get_analysis(
             detail="Analysis not found"
         )
 
-    analysis["_id"] = str(analysis["_id"])
+    analysis["id"] = str(analysis.pop("_id"))
 
     return analysis
 

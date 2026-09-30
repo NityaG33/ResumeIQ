@@ -1,6 +1,9 @@
 from datetime import datetime, timezone
-
-from database.connection import analyses_collection
+from bson import ObjectId
+from database.connection import (
+    analyses_collection,
+    resumes_collection,
+)
 
 
 def create_analysis(
@@ -28,28 +31,53 @@ def create_analysis(
 
 
 def get_user_analyses(user_id: str):
-    return list(
+    analyses = list(
         analyses_collection.find(
             {"user_id": user_id}
         ).sort("created_at", -1)
     )
 
+    for analysis in analyses:
+        analysis["resume_filename"] = None
 
-def get_user_analysis(
-    user_id: str,
-    analysis_id: str
-):
-    from bson import ObjectId
+        if analysis.get("resume_id"):
+            resume = resumes_collection.find_one({
+                "_id": ObjectId(analysis["resume_id"]),
+                "user_id": user_id,
+            })
 
+            if resume:
+                analysis["resume_filename"] = resume.get("filename")
+
+    return analyses
+
+
+def get_user_analysis(user_id: str, analysis_id: str):
     try:
         object_id = ObjectId(analysis_id)
     except Exception:
         return None
 
-    return analyses_collection.find_one({
+    analysis = analyses_collection.find_one({
         "_id": object_id,
         "user_id": user_id,
     })
+
+    if not analysis:
+        return None
+
+    analysis["resume_filename"] = None
+
+    if analysis.get("resume_id"):
+        resume = resumes_collection.find_one({
+            "_id": ObjectId(analysis["resume_id"]),
+            "user_id": user_id,
+        })
+
+        if resume:
+            analysis["resume_filename"] = resume.get("filename")
+
+    return analysis
 
 
 def delete_user_analysis(

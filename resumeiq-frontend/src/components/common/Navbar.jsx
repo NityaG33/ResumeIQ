@@ -1,13 +1,25 @@
 import { BrainCircuit } from "lucide-react";
+import { Link } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 function Navbar() {
+  const { user, logout } = useAuth();
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
+
   return (
     <nav className="bg-white border-b border-gray-200 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
 
         {/* Logo */}
 
-        <div className="flex items-center gap-3">
+        <Link to="/" className="flex items-center gap-3">
 
           <BrainCircuit
             className="text-blue-600"
@@ -24,23 +36,63 @@ function Navbar() {
             </p>
           </div>
 
-        </div>
+        </Link>
 
         {/* Navigation */}
 
-        <div className="hidden md:flex gap-8 text-slate-600 font-medium">
+        <div className="hidden md:flex items-center gap-8 text-slate-600 font-medium">
 
-          <a href="#" className="hover:text-blue-600">
+          <Link
+            to="/"
+            className="hover:text-blue-600"
+          >
             Home
-          </a>
+          </Link>
 
-          <a href="#" className="hover:text-blue-600">
-            Features
-          </a>
+          <Link to="/#features" className="hover:text-blue-600">
+              Features
+          </Link>
 
-          <a href="#" className="hover:text-blue-600">
-            About
-          </a>
+          {user ? (
+            <>
+              <Link
+                to="/dashboard"
+                className="hover:text-blue-600"
+              >
+                Analyze
+              </Link>
+
+              <Link
+                to="/analyses"
+                className="hover:text-blue-600"
+              >
+                History
+              </Link>
+
+              <button
+                onClick={handleLogout}
+                className="hover:text-red-600"
+              >
+                Logout
+              </button>
+            </>
+          ) : (
+            <>
+              <Link
+                to="/login"
+                className="hover:text-blue-600"
+              >
+                Login
+              </Link>
+
+              <Link
+                to="/register"
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+              >
+                Register
+              </Link>
+            </>
+          )}
 
         </div>
 
