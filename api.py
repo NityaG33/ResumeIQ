@@ -1,3 +1,5 @@
+import os
+from dotenv import load_dotenv
 from fastapi.middleware.cors import CORSMiddleware
 from auth.routes import router as auth_router
 from routes.analysis_routes import router as analysis_router
@@ -13,13 +15,21 @@ from fastapi import (
 )
 
 
+load_dotenv()
+
+FRONTEND_URL = os.getenv(
+    "FRONTEND_URL",
+    "http://localhost:5173"
+)
+
+
 # FastAPI App
 
 app = FastAPI(
     title="AI Resume Intelligence Platform",
     description=(
-        "An explainable AI-powered Resume Intelligence Platform "
-        "that evaluates Resume Quality, ATS Friendliness "
+        "An explainable AI-powered Resume Intelligence Platform"
+        "that evaluates Resume Quality, ATS Friendliness"
         "and Resume-JD Matching."
     ),
     version="1.0.0",
@@ -42,9 +52,7 @@ app.include_router(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173",
-    ],
+    allow_origins=[FRONTEND_URL],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
