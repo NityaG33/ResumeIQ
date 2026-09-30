@@ -1,5 +1,0 @@
-from pymongo import MongoClient
-
-client = MongoClient("YOUR_MONGODB_URI", serverSelectionTimeoutMS=10000)
-
-client.admin.command("ping")
