@@ -1,3 +1,4 @@
+
 fastapi
 uvicorn[standard]
 scikit-learn
@@ -9,4 +10,7 @@ pwdlib[argon2]
 pymongo
 python-dotenv
 email-validator
+
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch==2.7.1+cpu
 sentence-transformers
