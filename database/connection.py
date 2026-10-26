@@ -21,8 +21,3 @@ db = client[DATABASE_NAME]
 users_collection = db["users"]
 resumes_collection = db["resumes"]
 analyses_collection = db["analyses"]
-
-users_collection.create_index(
-    "email",
-    unique=True
-)

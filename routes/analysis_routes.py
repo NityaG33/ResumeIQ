@@ -32,6 +32,10 @@ from validators.request_validator import (
 )
 from schemas.analysis_schema import AnalysisResponse
 
+import logging
+
+logger = logging.getLogger(__name__)
+
 
 router = APIRouter(
     tags=["Analysis"],
@@ -73,10 +77,11 @@ def match_resume(
     except HTTPException:
         raise
 
-    except Exception as e:
+    except Exception:
+        logger.exception("Unexpected error during resume analysis")
         raise HTTPException(
             status_code=500,
-            detail=f"Internal Server Error: {str(e)}"
+            detail="Analysis failed due to an internal server error.",
         )
 
 
@@ -97,16 +102,16 @@ async def match_pdf(
     try:
         resume_text = extract_resume_text_from_upload(resume_file)
 
-        resume = create_resume(
-            user_id=str(current_user["_id"]),
-            filename=resume_file.filename,
-            file_reference=resume_file.filename,
-        )
-
         result = run_match(
             resume_text,
             jd_text,
             role,
+        )
+
+        resume = create_resume(
+            user_id=str(current_user["_id"]),
+            filename=resume_file.filename,
+            file_reference=resume_file.filename,
         )
 
         create_analysis(
@@ -122,12 +127,11 @@ async def match_pdf(
     except HTTPException:
         raise
 
-    except Exception as e:
-        traceback.print_exc()
-
+    except Exception:
+        logger.exception("Unexpected error during resume analysis")
         raise HTTPException(
             status_code=500,
-            detail=f"Internal Server Error: {str(e)}"
+            detail="Analysis failed due to an internal server error.",
         )
 
     
@@ -140,54 +144,10 @@ def analyze_resume_quality_only(
     request: ResumeQualityRequest,
     current_user: dict = Depends(get_current_user),
 ):
-    validate_resume_text_input(request.resume_text)
-
-    resume_report = build_resume_report(
-        request.resume_text
-    )
-
-    result = {
-        "resume_report": resume_report,
-        "recommendations": {
-            "resume": resume_report["recommendations"],
-            "job_match": [],
-        },
-        "explanation": [
-            f"Overall Resume Score: "
-            f"{resume_report['overall_score']}/100",
-            resume_report["summary"],
-        ],
-    }
-
-    create_analysis(
-        user_id=str(current_user["_id"]),
-        analysis_type="resume_quality",
-        input_type="text",
-        result=result,
-    )
-
-    return result
-
-
-# Resume Quality PDF Analysis Endpoint
-@router.post(
-    "/resume-quality-pdf",
-    response_model=ResumeQualityResponse,
-)
-async def analyze_resume_quality_pdf(
-    resume_file: UploadFile = File(...),
-    current_user: dict = Depends(get_current_user),
-):
     try:
-        resume_text = extract_resume_text_from_upload(resume_file)
+        validate_resume_text_input(request.resume_text)
 
-        resume = create_resume(
-            user_id=str(current_user["_id"]),
-            filename=resume_file.filename,
-            file_reference=resume_file.filename,
-        )
-
-        resume_report = build_resume_report(resume_text)
+        resume_report = build_resume_report(request.resume_text)
 
         result = {
             "resume_report": resume_report,
@@ -205,6 +165,60 @@ async def analyze_resume_quality_pdf(
         create_analysis(
             user_id=str(current_user["_id"]),
             analysis_type="resume_quality",
+            input_type="text",
+            result=result,
+        )
+
+        return result
+
+    except HTTPException:
+        raise
+
+    except Exception:
+        logger.exception(
+            "Unexpected error during text-based resume quality analysis"
+        )
+        raise HTTPException(
+            status_code=500,
+            detail="Analysis failed due to an internal server error.",
+        )
+
+
+# Resume Quality PDF Analysis Endpoint
+@router.post(
+    "/resume-quality-pdf",
+    response_model=ResumeQualityResponse,
+)
+async def analyze_resume_quality_pdf(
+    resume_file: UploadFile = File(...),
+    current_user: dict = Depends(get_current_user),
+):
+    try:
+        resume_text = extract_resume_text_from_upload(resume_file)
+        resume_report = build_resume_report(resume_text)
+
+        result = {
+            "resume_report": resume_report,
+            "recommendations": {
+                "resume": resume_report["recommendations"],
+                "job_match": [],
+            },
+            "explanation": [
+                f"Overall Resume Score: "
+                f"{resume_report['overall_score']}/100",
+                resume_report["summary"],
+            ],
+        }
+
+        resume = create_resume(
+            user_id=str(current_user["_id"]),
+            filename=resume_file.filename,
+            file_reference=resume_file.filename,
+        )
+
+        create_analysis(
+            user_id=str(current_user["_id"]),
+            analysis_type="resume_quality",
             input_type="pdf",
             result=result,
             resume_id=str(resume["_id"]),
@@ -215,12 +229,11 @@ async def analyze_resume_quality_pdf(
     except HTTPException:
         raise
 
-    except Exception as e:
-        traceback.print_exc()
-
+    except Exception:
+        logger.exception("Unexpected error during resume analysis")
         raise HTTPException(
             status_code=500,
-            detail=f"Internal Server Error: {str(e)}"
+            detail="Analysis failed due to an internal server error.",
         )
     
 

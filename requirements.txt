@@ -1,0 +1,12 @@
+fastapi
+uvicorn[standard]
+scikit-learn
+numpy
+pandas
+pdfplumber
+PyJWT[crypto]
+pwdlib[argon2]
+pymongo
+python-dotenv
+email-validator
+sentence-transformers

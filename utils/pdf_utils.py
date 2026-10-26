@@ -1,46 +1,77 @@
+
 import os
-import shutil
-from fastapi import UploadFile, HTTPException
+import tempfile
+
+from fastapi import HTTPException, UploadFile
+
 from ml.pdf_parser import extract_text_from_pdf
-from validators.request_validator import validate_resume_file
+
+MAX_PDF_SIZE = 5 * 1024 * 1024  # 5 MB
+CHUNK_SIZE = 64 * 1024
 
 
-def extract_resume_text_from_upload(resume_file: UploadFile) -> str:
+def extract_resume_text_from_upload(
+    resume_file: UploadFile,
+) -> str:
+    """
+    Validate and temporarily store a PDF, extract its text,
+    and remove the temporary file even if processing fails.
+    """
 
-    validate_resume_file(resume_file)
+    if resume_file.content_type != "application/pdf":
+        raise HTTPException(
+            status_code=400,
+            detail="Only PDF resumes are supported.",
+        )
 
-    os.makedirs("uploads", exist_ok=True)
-
-    upload_path = os.path.join(
-        "uploads",
-        resume_file.filename,
-    )
+    temp_path = None
+    total_size = 0
 
     try:
+        with tempfile.NamedTemporaryFile(
+            mode="wb",
+            suffix=".pdf",
+            delete=False,
+        ) as temp_file:
+            temp_path = temp_file.name
 
-        with open(
-            upload_path,
-            "wb",
-        ) as buffer:
+            while True:
+                chunk = resume_file.file.read(CHUNK_SIZE)
 
-            shutil.copyfileobj(
-                resume_file.file,
-                buffer,
-            )
+                if not chunk:
+                    break
 
-        resume_text = extract_text_from_pdf(
-            upload_path
-        )
+                total_size += len(chunk)
+
+                if total_size > MAX_PDF_SIZE:
+                    raise HTTPException(
+                        status_code=413,
+                        detail="PDF must be 5 MB or smaller.",
+                    )
+
+                temp_file.write(chunk)
+
+        # Basic content signature check. This is not a complete
+        # security check; pdfplumber must still parse the document.
+        with open(temp_path, "rb") as uploaded_pdf:
+            if not uploaded_pdf.read(5).startswith(b"%PDF-"):
+                raise HTTPException(
+                    status_code=400,
+                    detail="The uploaded file is not a valid PDF.",
+                )
+
+        resume_text = extract_text_from_pdf(temp_path)
 
         if not resume_text.strip():
             raise HTTPException(
                 status_code=400,
-                detail="Unable to extract text from the uploaded PDF."
+                detail="Unable to extract text from the uploaded PDF.",
             )
 
         return resume_text
 
     finally:
+        if temp_path and os.path.exists(temp_path):
+            os.remove(temp_path)
 
-        if os.path.exists(upload_path):
-            os.remove(upload_path)
+        resume_file.file.close()

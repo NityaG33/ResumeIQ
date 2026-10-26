@@ -1,3 +1,5 @@
+import os
+
 from fastapi import APIRouter, HTTPException, Response, status
 
 from auth.jwt import create_access_token
@@ -74,14 +76,19 @@ def login(
         "sub": str(db_user["_id"])
     })
 
+    
+    is_production = os.getenv("ENVIRONMENT") == "production"
+
     response.set_cookie(
         key="access_token",
         value=access_token,
         httponly=True,
-        secure=True,                    # Set this to true in production
-        samesite="lax",
-        max_age=60 * 60
+        secure=is_production,
+        samesite="none" if is_production else "lax",
+        max_age=60 * 60,
+        path="/",
     )
+
 
     return {
         "message": "Login successful"
@@ -90,11 +97,15 @@ def login(
 
 @router.post("/logout")
 def logout(response: Response):
+    
+    is_production = os.getenv("ENVIRONMENT") == "production"
+
     response.delete_cookie(
         key="access_token",
+        path="/",
         httponly=True,
-        secure=True,
-        samesite="lax"
+        secure=is_production,
+        samesite="none" if is_production else "lax",
     )
 
     return {"message": "Logout successful"}
