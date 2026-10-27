@@ -4,59 +4,45 @@ function RouteLoading() {
     const readmeUrl = import.meta.env.VITE_README_URL;
 
     return (
-        <main className="flex min-h-screen items-center justify-center bg-slate-950 px-4 py-8 text-white">
-            <div className="w-full max-w-md rounded-2xl border border-slate-700 bg-slate-900 p-6 text-center shadow-xl sm:p-8">
-                {/* Branding */}
+        <main className="flex min-h-screen items-center justify-center bg-slate-50 px-4 py-8 text-slate-900">
+            <div className="w-full max-w-md rounded-2xl border border-slate-200 bg-white p-6 text-center shadow-sm sm:p-8">
                 <div className="mb-8 flex items-center justify-center gap-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-500 text-xl font-bold">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-xl font-bold text-blue-600">
                         R
                     </div>
-                    <span className="text-xl font-bold tracking-tight">
+                    <span className="text-xl font-bold tracking-tight text-slate-900">
                         ResumeIQ
                     </span>
                 </div>
 
-                {/* Loading indicator */}
                 <div
-                    className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full border-4 border-indigo-400/30 border-t-indigo-400"
+                    className="mx-auto mb-6 h-12 w-12 rounded-full border-4 border-blue-100 border-t-blue-600 motion-safe:animate-spin"
                     role="status"
                     aria-label="Loading"
-                >
-                    <span className="text-lg font-bold text-indigo-300">
-                        AI
-                    </span>
-                </div>
+                />
 
-                <h1 className="mb-3 text-2xl font-bold tracking-tight">
+                <h1 className="mb-3 text-2xl font-bold tracking-tight text-slate-900">
                     Getting things ready
                 </h1>
 
-                <p className="mb-6 text-sm leading-6 text-slate-300">
-                    We're checking your session and preparing your
-                    ResumeIQ experience.
-                </p>
-
-                {/* Status */}
-                <div className="mb-3 flex items-center justify-center gap-2 text-sm text-slate-300">
-                    <span className="h-2 w-2 rounded-full bg-indigo-400" />
+                <div className="mb-3 flex items-center justify-center gap-2 text-sm text-slate-600">
+                    <span className="h-2 w-2 rounded-full bg-blue-600" />
                     Connecting to ResumeIQ
                 </div>
 
-                <div className="h-1.5 w-full overflow-hidden rounded-full bg-slate-700">
-                    <div className="h-full w-1/3 rounded-full bg-indigo-400" />
+                <div className="h-1.5 w-full overflow-hidden rounded-full bg-slate-100">
+                    <div className="h-full w-1/3 rounded-full bg-blue-600 motion-safe:animate-pulse" />
                 </div>
 
-                {/* Free-tier notice */}
-                <p className="mt-5 text-xs leading-6 text-slate-400">
+                <p className="mt-5 text-xs leading-6 text-slate-500">
                     ResumeIQ runs on free hosting, so the backend may
                     take up to a minute to wake up after inactivity.
                     Thanks for your patience!
                 </p>
 
-                {/* Helpful links */}
                 {(demoUrl || readmeUrl) && (
-                    <div className="mt-6 border-t border-slate-700 pt-5">
-                        <p className="mb-3 text-sm text-slate-300">
+                    <div className="mt-6 border-t border-slate-200 pt-5">
+                        <p className="mb-3 text-sm text-slate-600">
                             While you wait, explore the project:
                         </p>
 
@@ -66,7 +52,7 @@ function RouteLoading() {
                                     href={demoUrl}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="text-sm font-semibold text-indigo-300 underline-offset-4 hover:text-indigo-200 hover:underline"
+                                    className="text-sm font-semibold text-blue-600 underline-offset-4 hover:text-blue-700 hover:underline"
                                 >
                                     Watch demo video ↗
                                 </a>
@@ -77,7 +63,7 @@ function RouteLoading() {
                                     href={readmeUrl}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="text-sm font-semibold text-indigo-300 underline-offset-4 hover:text-indigo-200 hover:underline"
+                                    className="text-sm font-semibold text-blue-600 underline-offset-4 hover:text-blue-700 hover:underline"
                                 >
                                     Read the README ↗
                                 </a>
