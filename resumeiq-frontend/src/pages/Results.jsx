@@ -162,9 +162,9 @@ function Results() {
                     </>
                 )}
 
-                <pre className="mt-10 bg-slate-900 text-green-400 p-6 rounded-xl overflow-auto">
+                {/* <pre className="mt-10 bg-slate-900 text-green-400 p-6 rounded-xl overflow-auto">
                     {JSON.stringify(analysis, null, 2)}
-                </pre>
+                </pre> */}
 
             </div>
         </Layout>
