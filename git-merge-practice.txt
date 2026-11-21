@@ -1,1 +1,1 @@
-Main: ResumeIQ performance and scalability improvements.
+ResumeIQ: Improvements in testing, security, performance, and scalability.
