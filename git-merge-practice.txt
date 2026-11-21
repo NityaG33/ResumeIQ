@@ -1,1 +1,1 @@
-Branch A: ResumeIQ testing and quality improvements.
+Branch B: ResumeIQ authentication and security improvements.
